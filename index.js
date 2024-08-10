@@ -11,7 +11,7 @@ const app = express();
 
 // Middleware-------------------------
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: "include" }));
+app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(cookieParser());
 config();
 
@@ -22,9 +22,8 @@ app.use("/msg", msgRouter);
 
 // PORT and Host----------------------
 const PORT = process.env.PORT;
-const host = process.env.host;
 
-app.listen(PORT, host, () => {
-  console.log(`server running on http://${host}:${PORT}`);
+app.listen(PORT, () => {
+  console.log(`server running on http://${PORT}`);
   dbConnect();
 });

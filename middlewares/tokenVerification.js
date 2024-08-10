@@ -2,9 +2,11 @@ import jwt from "jsonwebtoken";
 
 export const verifyToken = async (req, res, next) => {
   try {
-  
-    const token = req.cookies.auth_token;
-    const { userId } = jwt.verify(token, process.env.jwt_secret);
+    const { auth_token } = req.cookies;
+    if (!auth_token) {
+      return res.status(401).send({ error: "No token provided" });
+    }
+    const { userId } = jwt.verify(auth_token, process.env.jwt_secret);
     req.userId = userId;
     next();
   } catch (error) {

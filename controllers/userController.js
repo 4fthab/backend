@@ -46,14 +46,17 @@ export const userLogin = async (req, res) => {
         if (matchPass) {
           // jwt logic
           const userId = response._id;
-          const token = jwt.sign({ userId }, process.env.jwt_secret, {
-            expiresIn: "7d",
-          });
-          res.cookie("auth_token", token, {
-            maxAge: 1000 * 60 * 60 * 24 * 7,
-            httpOnly: true,
-          });
-          return res.status(200).send({ message: "Login succesfully" });
+          const token = jwt.sign({ userId }, process.env.jwt_secret);
+
+          return res
+            .cookie("auth_token", token, {
+              maxAge: 1000 * 60 * 60 * 24 * 7,
+              httpOnly: true,
+              secure: false,
+              sameSite: "Lax",
+            })
+            .status(200)
+            .send({ message: "Login succesfully" });
         } else {
           return res.status(401).send({ error: "Password not matching!!" });
         }
